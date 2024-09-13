@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "noImplicitAny": true,
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "sourceMap": true
+  },
+  "files": [
+      "./index.ts",
+      "./routes/open.ts",
+      "./routes/poll.ts",
+      "./routes/status.ts",
+  ]
+}
