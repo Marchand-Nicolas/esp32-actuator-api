@@ -15,7 +15,8 @@ const handlePoll = async (
   if (ip) MEMORY.ip = ip;
   MEMORY.lastPoll = Date.now();
   res.writeHead(200, { "Content-Type": "application/json" });
-  res.end("1");
+  res.end(MEMORY.opening.toString());
+  MEMORY.opening = false;
 };
 
 export default handlePoll;

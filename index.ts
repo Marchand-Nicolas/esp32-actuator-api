@@ -11,12 +11,23 @@ export type Memory = {
   battery: number | null;
   ip: string | null;
   lastPoll: number | null;
+  opening: boolean;
 };
+
+export const clientHeaders: Record<string, string> = process.env.DEV
+  ? {
+      "Access-Control-Allow-Origin": "*",
+      "Content-Type": "application/json",
+    }
+  : {
+      "Content-Type": "application/json",
+    };
 
 const MEMORY: Memory = {
   battery: null,
   ip: null,
   lastPoll: null,
+  opening: false,
 };
 
 const routes = ["/poll", "/open", "/status"];
@@ -45,6 +56,7 @@ routes.forEach((route) => {
 const server = http.createServer((req, res) => {
   const url = req.url;
   const route = url.split("?")[0];
+  console.log(`Request for ${route}`);
   if (routesFunctions[route]) {
     return routesFunctions[route](req, res, MEMORY);
   }
