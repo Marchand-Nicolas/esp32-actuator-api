@@ -15,8 +15,16 @@ const handlePoll = async (
   if (ip) MEMORY.ip = ip;
   MEMORY.lastPoll = Date.now();
   res.writeHead(200, { "Content-Type": "application/json" });
-  res.end(MEMORY.opening.toString());
-  MEMORY.opening = false;
+  // Opening is false, wait as much as possible (avoiding timeout)
+  const INTERVAL = 10;
+  const MAX_DURATION = 1000 * 90;
+  let currentDuration = 0;
+  const interval = setInterval(() => {
+    if (MEMORY.opening || currentDuration >= MAX_DURATION) {
+      clearInterval(interval);
+      res.end(MEMORY.opening.toString());
+    }
+    currentDuration += INTERVAL;
+  }, INTERVAL);
 };
-
 export default handlePoll;
