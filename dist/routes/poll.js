@@ -37,7 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var handlePoll = function (req, res, MEMORY) { return __awaiter(void 0, void 0, void 0, function () {
-    var ip, url, params, battery;
+    var ip, url, params, battery, INTERVAL, MAX_DURATION, currentDuration, interval;
     var _a;
     return __generator(this, function (_b) {
         ip = (_a = req.connection.remoteAddress) === null || _a === void 0 ? void 0 : _a.split(":").pop();
@@ -51,8 +51,18 @@ var handlePoll = function (req, res, MEMORY) { return __awaiter(void 0, void 0, 
             MEMORY.ip = ip;
         MEMORY.lastPoll = Date.now();
         res.writeHead(200, { "Content-Type": "application/json" });
-        res.end(MEMORY.opening.toString());
-        MEMORY.opening = false;
+        INTERVAL = 10;
+        MAX_DURATION = 1000 * 90;
+        currentDuration = 0;
+        interval = setInterval(function () {
+            if (MEMORY.opening || currentDuration >= MAX_DURATION) {
+                clearInterval(interval);
+                res.end(MEMORY.opening.toString());
+                if (MEMORY.opening)
+                    MEMORY.opening = false;
+            }
+            currentDuration += INTERVAL;
+        }, INTERVAL);
         return [2];
     });
 }); };

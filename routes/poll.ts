@@ -23,6 +23,7 @@ const handlePoll = async (
     if (MEMORY.opening || currentDuration >= MAX_DURATION) {
       clearInterval(interval);
       res.end(MEMORY.opening.toString());
+      if (MEMORY.opening) MEMORY.opening = false;
     }
     currentDuration += INTERVAL;
   }, INTERVAL);
