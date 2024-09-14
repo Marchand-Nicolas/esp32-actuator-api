@@ -26,9 +26,9 @@ const handleStatus = async (
   const INTERVAL = 10;
   const MAX_DURATION = 1000 * 10;
   let currentDuration = 0;
-  const MEMORY_COPY = { ...MEMORY };
+  const MEMORY_COPY = JSON.stringify(MEMORY);
   const interval = setInterval(() => {
-    const isDifferent = JSON.stringify(MEMORY) !== JSON.stringify(MEMORY_COPY);
+    const isDifferent = JSON.stringify(MEMORY) !== MEMORY_COPY;
     if (isDifferent || currentDuration >= MAX_DURATION) {
       clearInterval(interval);
       res.end(
