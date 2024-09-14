@@ -49,15 +49,23 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var __1 = require("..");
 var handleStatus = function (req, res, MEMORY) { return __awaiter(void 0, void 0, void 0, function () {
-    var token, INTERVAL, MAX_DURATION, currentDuration, MEMORY_COPY, interval;
+    var token, isfirstLoad, INTERVAL, MAX_DURATION, currentDuration, MEMORY_COPY, interval;
     return __generator(this, function (_a) {
         token = req.headers["authorization"];
+        isfirstLoad = req.url.split("?firstLoad=")[1];
         if (token !== "Bearer ".concat(process.env.TOKEN)) {
             res.writeHead(401, { "Content-Type": "application/json" });
             res.end("{\"error\": \"Unauthorized\"}");
             return [2];
         }
         res.writeHead(200, __1.clientHeaders);
+        if (isfirstLoad === "true") {
+            res.end(JSON.stringify({
+                status: "ok",
+                memory: MEMORY,
+            }));
+            return [2];
+        }
         INTERVAL = 10;
         MAX_DURATION = 1000 * 10;
         currentDuration = 0;

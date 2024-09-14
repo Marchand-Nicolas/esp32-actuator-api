@@ -7,12 +7,22 @@ const handleStatus = async (
   MEMORY: Memory
 ) => {
   const token = req.headers["authorization"];
+  const isfirstLoad = req.url.split("?firstLoad=")[1];
   if (token !== `Bearer ${process.env.TOKEN}`) {
     res.writeHead(401, { "Content-Type": "application/json" });
     res.end(`{"error": "Unauthorized"}`);
     return;
   }
   res.writeHead(200, clientHeaders);
+  if (isfirstLoad === "true") {
+    res.end(
+      JSON.stringify({
+        status: "ok",
+        memory: MEMORY,
+      })
+    );
+    return;
+  }
   const INTERVAL = 10;
   const MAX_DURATION = 1000 * 10;
   let currentDuration = 0;
