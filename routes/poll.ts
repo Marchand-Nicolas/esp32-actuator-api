@@ -17,7 +17,7 @@ const handlePoll = async (
   res.writeHead(200, { "Content-Type": "application/json" });
   // Opening is false, wait as much as possible (avoiding timeout)
   const INTERVAL = 10;
-  const MAX_DURATION = 1000 * 90;
+  const MAX_DURATION = 1000 * 20;
   let currentDuration = 0;
   const interval = setInterval(() => {
     if (MEMORY.opening || currentDuration >= MAX_DURATION) {

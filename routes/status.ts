@@ -13,12 +13,23 @@ const handleStatus = async (
     return;
   }
   res.writeHead(200, clientHeaders);
-  res.end(
-    JSON.stringify({
-      status: "ok",
-      memory: MEMORY,
-    })
-  );
+  const INTERVAL = 10;
+  const MAX_DURATION = 1000 * 10;
+  let currentDuration = 0;
+  const MEMORY_COPY = { ...MEMORY };
+  const interval = setInterval(() => {
+    const isDifferent = JSON.stringify(MEMORY) !== JSON.stringify(MEMORY_COPY);
+    if (isDifferent || currentDuration >= MAX_DURATION) {
+      clearInterval(interval);
+      res.end(
+        JSON.stringify({
+          status: "ok",
+          memory: MEMORY,
+        })
+      );
+    }
+    currentDuration += INTERVAL;
+  }, INTERVAL);
 };
 
 export default handleStatus;

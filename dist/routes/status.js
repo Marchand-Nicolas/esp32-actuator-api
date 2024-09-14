@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -38,7 +49,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var __1 = require("..");
 var handleStatus = function (req, res, MEMORY) { return __awaiter(void 0, void 0, void 0, function () {
-    var token;
+    var token, INTERVAL, MAX_DURATION, currentDuration, MEMORY_COPY, interval;
     return __generator(this, function (_a) {
         token = req.headers["authorization"];
         if (token !== "Bearer ".concat(process.env.TOKEN)) {
@@ -47,10 +58,21 @@ var handleStatus = function (req, res, MEMORY) { return __awaiter(void 0, void 0
             return [2];
         }
         res.writeHead(200, __1.clientHeaders);
-        res.end(JSON.stringify({
-            status: "ok",
-            memory: MEMORY,
-        }));
+        INTERVAL = 10;
+        MAX_DURATION = 1000 * 10;
+        currentDuration = 0;
+        MEMORY_COPY = __assign({}, MEMORY);
+        interval = setInterval(function () {
+            var isDifferent = JSON.stringify(MEMORY) !== JSON.stringify(MEMORY_COPY);
+            if (isDifferent || currentDuration >= MAX_DURATION) {
+                clearInterval(interval);
+                res.end(JSON.stringify({
+                    status: "ok",
+                    memory: MEMORY,
+                }));
+            }
+            currentDuration += INTERVAL;
+        }, INTERVAL);
         return [2];
     });
 }); };

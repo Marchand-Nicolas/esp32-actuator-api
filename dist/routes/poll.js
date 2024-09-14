@@ -52,7 +52,7 @@ var handlePoll = function (req, res, MEMORY) { return __awaiter(void 0, void 0, 
         MEMORY.lastPoll = Date.now();
         res.writeHead(200, { "Content-Type": "application/json" });
         INTERVAL = 10;
-        MAX_DURATION = 1000 * 90;
+        MAX_DURATION = 1000 * 20;
         currentDuration = 0;
         interval = setInterval(function () {
             if (MEMORY.opening || currentDuration >= MAX_DURATION) {
