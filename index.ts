@@ -30,7 +30,7 @@ const MEMORY: Memory = {
   opening: false,
 };
 
-const routes = ["/poll", "/open", "/status"];
+const routes = ["/poll", "/open", "/status", "/open-get"];
 
 type RouteFunction = (
   req: http.IncomingMessage,
