@@ -13,5 +13,6 @@
       "./routes/poll.ts",
       "./routes/status.ts",
       "./routes/open-get.ts",
+      "./routes/open-for-duration.ts",
   ]
 }

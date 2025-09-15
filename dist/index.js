@@ -20,8 +20,10 @@ var MEMORY = {
     ip: null,
     lastPoll: null,
     opening: false,
+    keepOpenStart: null,
+    keepOpenDuration: null,
 };
-var routes = ["/poll", "/open", "/status"];
+var routes = ["/poll", "/open", "/status", "/open-get", "/open-for-duration"];
 var routesFunctions = {};
 routes.forEach(function (route) {
     var routeBase = "./routes".concat(route);

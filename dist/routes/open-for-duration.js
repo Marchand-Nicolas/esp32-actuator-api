@@ -36,40 +36,25 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var handlePoll = function (req, res, MEMORY) { return __awaiter(void 0, void 0, void 0, function () {
-    var ip, url, params, battery, INTERVAL, MAX_DURATION, currentDuration, interval;
-    var _a;
-    return __generator(this, function (_b) {
-        ip = (_a = req.connection.remoteAddress) === null || _a === void 0 ? void 0 : _a.split(":").pop();
+var __1 = require("..");
+var handleOpenForDuration = function (req, res, MEMORY) { return __awaiter(void 0, void 0, void 0, function () {
+    var token, url, durationStr, duration, now;
+    return __generator(this, function (_a) {
+        token = req.headers["authorization"];
+        if (token !== "Bearer ".concat(process.env.TOKEN)) {
+            res.writeHead(401, { "Content-Type": "application/json" });
+            res.end("{\"error\": \"Unauthorized\"}");
+            return [2];
+        }
         url = req.url;
-        console.log("Request from ".concat(ip, " for ").concat(url));
-        params = new URLSearchParams(url === null || url === void 0 ? void 0 : url.split("?")[1]);
-        battery = params.get("battery");
-        if (battery)
-            MEMORY.battery = parseFloat(battery);
-        if (ip)
-            MEMORY.ip = ip;
-        MEMORY.lastPoll = Date.now();
-        res.writeHead(200, { "Content-Type": "application/json" });
-        INTERVAL = 10;
-        MAX_DURATION = 1000 * 60;
-        currentDuration = 0;
-        interval = setInterval(function () {
-            var now = Date.now();
-            var keepOpen = MEMORY.keepOpenStart &&
-                now - MEMORY.keepOpenStart < MEMORY.keepOpenDuration;
-            var open = MEMORY.opening || keepOpen;
-            if (MEMORY.opening ||
-                currentDuration >= MAX_DURATION ||
-                (open && currentDuration >= 10)) {
-                clearInterval(interval);
-                res.end(open.toString());
-                if (MEMORY.opening)
-                    MEMORY.opening = false;
-            }
-            currentDuration += INTERVAL;
-        }, INTERVAL);
+        durationStr = parseInt((url === null || url === void 0 ? void 0 : url.split("?")[1].split("=")[1]) || "0");
+        duration = durationStr * 1000;
+        now = Date.now();
+        MEMORY.keepOpenStart = now;
+        MEMORY.keepOpenDuration = duration;
+        res.writeHead(200, __1.clientHeaders);
+        res.end("{\"status\": \"ok\"}");
         return [2];
     });
 }); };
-exports.default = handlePoll;
+exports.default = handleOpenForDuration;

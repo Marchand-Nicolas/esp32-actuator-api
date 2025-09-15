@@ -17,12 +17,21 @@ const handlePoll = async (
   res.writeHead(200, { "Content-Type": "application/json" });
   // Opening is false, wait as much as possible (avoiding timeout)
   const INTERVAL = 10;
-  const MAX_DURATION = 1000 * 20;
+  const MAX_DURATION = 1000 * 60;
   let currentDuration = 0;
   const interval = setInterval(() => {
-    if (MEMORY.opening || currentDuration >= MAX_DURATION) {
+    const now = Date.now();
+    const keepOpen =
+      MEMORY.keepOpenStart &&
+      now - MEMORY.keepOpenStart < MEMORY.keepOpenDuration;
+    const open = MEMORY.opening || keepOpen;
+    if (
+      MEMORY.opening ||
+      currentDuration >= MAX_DURATION ||
+      (open && currentDuration >= 10)
+    ) {
       clearInterval(interval);
-      res.end(MEMORY.opening.toString());
+      res.end(open.toString());
       if (MEMORY.opening) MEMORY.opening = false;
     }
     currentDuration += INTERVAL;

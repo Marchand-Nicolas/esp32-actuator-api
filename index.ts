@@ -12,6 +12,8 @@ export type Memory = {
   ip: string | null;
   lastPoll: number | null;
   opening: boolean;
+  keepOpenStart: number | null;
+  keepOpenDuration: number | null;
 };
 
 export const clientHeaders: Record<string, string> = process.env.DEV
@@ -28,9 +30,11 @@ const MEMORY: Memory = {
   ip: null,
   lastPoll: null,
   opening: false,
+  keepOpenStart: null,
+  keepOpenDuration: null,
 };
 
-const routes = ["/poll", "/open", "/status", "/open-get"];
+const routes = ["/poll", "/open", "/status", "/open-get", "/open-for-duration"];
 
 type RouteFunction = (
   req: http.IncomingMessage,
