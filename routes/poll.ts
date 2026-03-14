@@ -31,8 +31,13 @@ const handlePoll = async (
       (open && currentDuration >= 10)
     ) {
       clearInterval(interval);
-      res.end(open.toString());
-      if (MEMORY.opening) MEMORY.opening = false;
+      setTimeout(
+        () => {
+          res.end(open.toString());
+          if (MEMORY.opening) MEMORY.opening = false;
+        },
+        keepOpen ? 500 : 0
+      );
     }
     currentDuration += INTERVAL;
   }, INTERVAL);

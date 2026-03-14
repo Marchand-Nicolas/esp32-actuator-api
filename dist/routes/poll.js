@@ -63,9 +63,11 @@ var handlePoll = function (req, res, MEMORY) { return __awaiter(void 0, void 0, 
                 currentDuration >= MAX_DURATION ||
                 (open && currentDuration >= 10)) {
                 clearInterval(interval);
-                res.end(open.toString());
-                if (MEMORY.opening)
-                    MEMORY.opening = false;
+                setTimeout(function () {
+                    res.end(open.toString());
+                    if (MEMORY.opening)
+                        MEMORY.opening = false;
+                }, keepOpen ? 500 : 0);
             }
             currentDuration += INTERVAL;
         }, INTERVAL);
